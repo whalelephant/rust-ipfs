@@ -2,7 +2,7 @@ use crate::pb::{FlatUnixFs, PBLink, UnixFs, UnixFsType};
 use alloc::{borrow::Cow, vec::Vec};
 use cid::Cid;
 use core::{fmt, mem};
-use quick_protobuf::{MessageWrite, Writer};
+use quick_protobuf::{BytesWriter, MessageWrite, Writer};
 use sha2::{Digest, Sha256};
 
 /// File tree builder. Implements `Default` which tracks the recent defaults.
@@ -307,7 +307,8 @@ fn render_and_hash(flat: &FlatUnixFs<'_>) -> (Cid, Vec<u8>) {
     // either just render a fixed header and continue with the body OR links, though the links are
     // a bit more complicated.
     let mut out = Vec::with_capacity(flat.get_size());
-    let mut writer = Writer::new(&mut out);
+    let mut _buf = BytesWriter::new(out.as_mut_slice());
+    let mut writer = Writer::new(_buf);
     flat.write_message(&mut writer)
         .expect("unsure how this could fail");
     let mh = multihash::wrap(multihash::Code::Sha2_256, &Sha256::digest(&out));
