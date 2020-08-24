@@ -262,9 +262,6 @@ impl fmt::Display for ShardError {
     }
 }
 
-#[cfg(feature = "std")]
-impl std::error::Error for ShardError {}
-
 /// Errors which can occur when looking up a HAMTSharded directory.
 #[derive(Debug)]
 pub enum LookupError {
@@ -320,17 +317,6 @@ impl fmt::Display for LookupError {
                 e
             ),
             Read(None) => write!(fmt, "HAMTDirectory not found in empty dag-pb node"),
-        }
-    }
-}
-
-#[cfg(feature = "std")]
-impl std::error::Error for LookupError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        use LookupError::*;
-        match self {
-            Read(Some(e)) => Some(e),
-            _ => None,
         }
     }
 }

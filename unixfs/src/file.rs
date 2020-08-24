@@ -43,18 +43,6 @@ impl fmt::Display for FileReadFailed {
     }
 }
 
-#[cfg(feature = "std")]
-impl std::error::Error for FileReadFailed {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        use FileReadFailed::*;
-        match self {
-            InvalidCid(e) => Some(e),
-            Read(Some(e)) => Some(e),
-            _ => None,
-        }
-    }
-}
-
 impl<'a> From<ParsingFailed<'a>> for FileReadFailed {
     fn from(e: ParsingFailed<'a>) -> Self {
         use ParsingFailed::*;
@@ -134,9 +122,6 @@ impl fmt::Display for FileError {
         }
     }
 }
-
-#[cfg(feature = "std")]
-impl std::error::Error for FileError {}
 
 impl From<FileError> for FileReadFailed {
     fn from(e: FileError) -> Self {

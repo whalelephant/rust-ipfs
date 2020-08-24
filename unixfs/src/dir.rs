@@ -126,18 +126,6 @@ impl fmt::Display for ResolveError {
     }
 }
 
-#[cfg(feature = "std")]
-impl std::error::Error for ResolveError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        use ResolveError::*;
-        match self {
-            Read(e) => Some(e),
-            Lookup(LookupError::Read(Some(e))) => Some(e),
-            _ => None,
-        }
-    }
-}
-
 impl From<InvalidCidInLink> for ResolveError {
     fn from(e: InvalidCidInLink) -> ResolveError {
         ResolveError::Lookup(e.into())

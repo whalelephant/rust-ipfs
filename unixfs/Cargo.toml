@@ -9,7 +9,7 @@ repository = "https://github.com/rs-ipfs/rust-ipfs"
 version = "0.0.1"
 
 [features]
-default = []
+default = ["std"]
 std = []
 with-filetime = ["filetime"]
 

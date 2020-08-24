@@ -851,9 +851,6 @@ impl fmt::Display for Error {
     }
 }
 
-#[cfg(feature = "std")]
-impl std::error::Error for Error {}
-
 fn path_pop(path: &mut String) -> bool {
     if path.is_empty() || path == "/" {
         return false;

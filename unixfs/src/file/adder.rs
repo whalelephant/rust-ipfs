@@ -306,7 +306,9 @@ fn render_and_hash(flat: &FlatUnixFs<'_>) -> (Cid, Vec<u8>) {
     // TODO: as shown in later dagger we don't really need to render the FlatUnixFs fully; we could
     // either just render a fixed header and continue with the body OR links, though the links are
     // a bit more complicated.
-    let mut out = Vec::with_capacity(flat.get_size());
+    let size = flat.get_size();
+    let mut out = Vec::with_capacity(size);
+    out.resize(size, 0u8);
     let mut _buf = BytesWriter::new(out.as_mut_slice());
     let mut writer = Writer::new(_buf);
     flat.write_message(&mut writer)

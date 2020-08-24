@@ -30,19 +30,6 @@ impl fmt::Display for ParsingFailed<'_> {
     }
 }
 
-#[cfg(feature = "std")]
-impl std::error::Error for ParsingFailed<'_> {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        use ParsingFailed::*;
-
-        match self {
-            InvalidDagPb(e) => Some(e),
-            InvalidUnixFs(e, _) => Some(e),
-            NoData(_) => None,
-        }
-    }
-}
-
 // This has been aliased as UnixFs<'a>
 impl<'a> TryFrom<&'a merkledag::PBNode<'a>> for unixfs::Data<'a> {
     type Error = quick_protobuf::Error;
